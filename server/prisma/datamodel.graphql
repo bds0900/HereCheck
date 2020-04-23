@@ -1,0 +1,72 @@
+# This file contains data model type define
+# HereCheck Backend
+# By Pi Project Team
+type Program {
+  id: ID! @id
+  name: String!
+  courses: [Course!]! @relation(name: "ProgramCourse", onDelete: CASCADE)
+  faculties: [Faculty!]! @relation(name: "ProgramFaculty", onDelete: SET_NULL)
+  students: [Student!]! @relation(name: "ProgramStudent", onDelete: SET_NULL)
+}
+
+type Course {
+  id: ID! @id
+  name: String!
+  numOfStudent: Int!
+  program: Program! @relation(name: "ProgramCourse", onDelete: SET_NULL)
+  enrollments: [Enrollment!]! @relation(name: "CourseEnrollment", onDelete: CASCADE)
+  instructings: [Instructing!]! @relation(name: "CourseInstructing", onDelete:CASCADE)
+  attendances: [Attendance!]! @relation(name: "CourseAttendance", onDelete: CASCADE)
+  classes: [Class!] @relation(name: "CourseClass", onDelete: CASCADE)
+}
+
+type Student {
+  id: ID! @id
+  FirstName: String!
+  LastName: String!
+  email: String! @unique
+  password: String!
+  status: String!
+  program: Program @relation(name: "ProgramStudent", onDelete: SET_NULL)
+  enrollments: [Enrollment!]! @relation(name: "StudentEnrollment", onDelete: CASCADE)
+  attendances: [Attendance!]! @relation(name: "StudentAttendance", onDelete: CASCADE)
+}
+
+type Faculty{
+  id: ID! @id
+  FirstName: String!
+  LastName: String!
+  email: String! @unique
+  password: String!
+  status: String!
+  program: Program @relation(name: "ProgramFaculty", onDelete: SET_NULL)
+  instructings: [Instructing!]! @relation(name: "FacultyInstructing", onDelete: CASCADE)
+}
+
+type Enrollment{
+  id: ID! @id
+  course: Course! @relation(name: "CourseEnrollment", onDelete: SET_NULL)
+  student: Student! @relation(name: "StudentEnrollment", onDelete: SET_NULL)
+}
+
+type Instructing{
+  id: ID! @id
+  course: Course! @relation(name: "CourseInstructing", onDelete: SET_NULL)
+  faculty: Faculty! @relation(name: "FacultyInstructing", onDelete: SET_NULL)
+}
+
+type Attendance {
+  id: ID! @id
+  course: Course! @relation(name: "CourseAttendance", onDelete: SET_NULL)
+  student: Student! @relation(name: "StudentAttendance", onDelete: SET_NULL)
+  time: String!
+  class: Class!
+}
+
+type Class {
+  id: ID! @id
+  course: Course! @relation(name: "CourseClass", onDelete: SET_NULL)
+  room: String!
+  startTime: String!
+  endTime: String!
+}
